@@ -79,7 +79,8 @@ void initSuspendTimer() {
 
 void HW_Init() {
     uint32_t soundDev = open("/dev/mixer", O_RDWR);
-    int32_t vol = (100 << 8) | 100;
+    //int32_t vol = (100 << 8) | 100;
+	int32_t vol = (volumeValue << 8) | 100;
 
     /* Init memory registers, pretty much required for anthing RS-97 specific */
 	memdev = open("/dev/mem", O_RDWR);

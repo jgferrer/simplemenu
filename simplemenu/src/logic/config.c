@@ -1383,6 +1383,7 @@ void saveLastState() {
 	fprintf(fp, "%d;\n", menuVisibleInFullscreenMode);
 	fprintf(fp, "%d;\n", activeTheme);
 	fprintf(fp, "%d;\n", timeoutValue);
+	fprintf(fp, "%d;\n", volumeValue);
 	fprintf(fp, "%d;\n", activeGroup);
 	fprintf(fp, "%d;\n", currentSectionNumber);
 	fprintf(fp, "%d;\n", currentMode);
@@ -1426,6 +1427,7 @@ void loadLastState() {
 	int menuVisible= -1;
 	int themeRead= -1;
 	int timeout= -1;
+	int volumne= -1;
 	int groupCounter=-1;
 	int savedVersion=-1;
 	int itemsRead=-1;
@@ -1459,6 +1461,8 @@ void loadLastState() {
 			themeRead=atoifgl(configurations[0]);
 		} else if(timeout==-1) {
 			timeout=atoifgl(configurations[0]);
+		} else if(volume==-1) {
+			volume=atoifgl(configurations[0]);
 		} else if (startInGroup==-1) {
 			startInGroup = atoifgl(configurations[0]);
 		} else if (startInSection==-1) {
@@ -1496,6 +1500,7 @@ void loadLastState() {
 	menuVisibleInFullscreenMode=menuVisible;
 	activeTheme=themeRead;
 	timeoutValue=timeout;
+	volumeValue=volume;
 	currentSectionNumber=startInSection;
 	activeGroup = startInGroup;
 	currentMode=itemsRead;

@@ -806,6 +806,32 @@ void performSettingsChoosingAction() {
 					}
 				}
 			}
+		} else if (chosenSetting==VOLUME_LEVEL_OPTION) {
+			if (keys[BTN_LEFT]) {
+				if (volumeValue>0) {
+					volumeValue-=5;
+				}
+			} else {
+				if (volumeValue<100) {
+					volumeValue+=5;
+				}
+			}
+			
+			#ifdef TARGET_RFW
+			uint32_t soundDev = open("/dev/mixer", O_RDWR);
+			int32_t vol = (volumeValue << 8) | 100;
+			 /* Init memory registers, pretty much required for anthing RS-97 specific */
+			memdev = open("/dev/mem", O_RDWR);
+			if (memdev > 0) {
+				memregs = (uint32_t*)mmap(0, 0x20000, PROT_READ | PROT_WRITE, MAP_SHARED, memdev, 0x10000000);
+				if (memregs == MAP_FAILED) {
+				  close(memdev);
+				}
+			}
+			ioctl(soundDev, SOUND_MIXER_WRITE_VOLUME, &vol);
+			close(soundDev);
+			#endif
+			
 		} else if (chosenSetting==DEFAULT_OPTION) {
 			char command [300];
 			if (shutDownEnabled) {
