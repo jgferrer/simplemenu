@@ -186,7 +186,8 @@ int performAction(struct Node *node) {
 		loadRomPreferences(CURRENT_SECTION.currentGameNode->data);
 		return 0;
 	}
-	if(keys[BTN_L1]) {
+
+	if((keys[BTN_L1] || keys[BTN_UP] || keys[BTN_LEFT]) && currentState==SELECTING_SECTION) {
 		if (currentSectionNumber!=favoritesSectionNumber) {
 			currentState=SELECTING_SECTION;
 			hotKeyPressed=0;
@@ -198,7 +199,7 @@ int performAction(struct Node *node) {
 		return 0;
 	}
 
-	if(keys[BTN_R1]) {
+	if((keys[BTN_R1] || keys[BTN_DOWN] || keys[BTN_RIGHT]) && currentState==SELECTING_SECTION) {
 		if (currentSectionNumber!=favoritesSectionNumber) {
 			currentState=SELECTING_SECTION;
 			hotKeyPressed=0;

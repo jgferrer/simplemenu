@@ -1,7 +1,7 @@
 # Software Name
 TARGET = simplemenu
-PLATFORM = PC
-#PLATFORM = RFW
+#PLATFORM = PC
+PLATFORM = RFW
 #PLATFORM = OD
 #PLATFORM = OD-BETA
 #PLATFORM = NPG
@@ -14,9 +14,14 @@ ifeq ($(PLATFORM), BITTBOY)
 	LINKER = /opt/bittboy-toolchain/bin/arm-buildroot-linux-musleabi-gcc
 	CFLAGS = -DTARGET_BITTBOY -Ofast -fdata-sections -ffunction-sections -fno-PIC -flto -Wall -Wextra
 	LIBS += -lSDL -lasound -lSDL_image -lpng -ljpeg -lSDL_ttf -lfreetype -lz -lbz2
+#else ifeq ($(PLATFORM), RFW)
+#	CC = /opt/rg300-toolchain/usr/bin/mipsel-linux-gcc
+#	LINKER = /opt/rg300-toolchain/usr/bin/mipsel-linux-gcc
+#	CFLAGS = -DTARGET_RFW -DUSE_GZIP -O2 -fdata-sections -ffunction-sections -fno-PIC -flto -Wall -Wextra
+#	LIBS += -lSDL -lSDL_sound -lSDL_image -lSDL_ttf -lopk -lz
 else ifeq ($(PLATFORM), RFW)
-	CC = /opt/rg300-toolchain/usr/bin/mipsel-linux-gcc
-	LINKER = /opt/rg300-toolchain/usr/bin/mipsel-linux-gcc
+	CC = mipsel-linux-gcc
+	LINKER = mipsel-linux-gcc
 	CFLAGS = -DTARGET_RFW -DUSE_GZIP -O2 -fdata-sections -ffunction-sections -fno-PIC -flto -Wall -Wextra
 	LIBS += -lSDL -lSDL_sound -lSDL_image -lSDL_ttf -lopk -lz
 else ifeq ($(PLATFORM), OD)

@@ -16,7 +16,7 @@ else
     user_name="root";
 fi
 
-cd /home/bittboy/git/simplemenu/simplemenu/
+cd /home/jgferrer/Development/simplemenu/simplemenu/
 
 if [ "$1" = "OD" ]; then
     make clean
@@ -32,7 +32,7 @@ elif [ "$1" = "RFW" ]; then
     make PLATFORM=RFW
 fi
 
-cd /home/bittboy/git/invoker/invoker/
+cd /home/jgferrer/Development/invoker/invoker/
 
 if [ "$1" = "OD" ]; then
     make clean
@@ -48,9 +48,9 @@ elif [ "$1" = "RFW" ]; then
     make PLATFORM=RFW
 fi
 
-cp invoker.dge /home/bittboy/git/simplemenu/simplemenu/output
+cp invoker.dge /home/jgferrer/Development/simplemenu/simplemenu/output
 
-cd /home/bittboy/git/simplemenu/simplemenu/output
+cd /home/jgferrer/Development/simplemenu/simplemenu/output
 
 cat>default.${var}.desktop<<EOF
 [Desktop Entry]

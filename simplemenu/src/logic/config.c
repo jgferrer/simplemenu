@@ -574,14 +574,14 @@ void createConfigFilesInHomeIfTheyDontExist() {
 	char pathToConfigFiles[5000];
 	char pathToAppFiles[5000];
 	char pathToGameFiles[5000];
-//	char pathToThemeFiles[5000];
+	char pathToScriptsFiles[5000];
 	char pathToTempFiles[5000];
 	char pathToSectionGroupsFiles[5000];
 	snprintf(pathToConfigFiles,sizeof(pathToConfigFiles),"%s/.simplemenu",home);
 	snprintf(pathToAppFiles,sizeof(pathToConfigFiles),"%s/.simplemenu/apps",home);
 	snprintf(pathToGameFiles,sizeof(pathToGameFiles),"%s/.simplemenu/games",home);
 	snprintf(pathToSectionGroupsFiles,sizeof(pathToSectionGroupsFiles),"%s/.simplemenu/section_groups",home);
-//	snprintf(pathToThemeFiles,sizeof(pathToThemeFiles),"%s/.simplemenu/themes",home);
+	snprintf(pathToScriptsFiles,sizeof(pathToScriptsFiles),"%s/.simplemenu/scripts",home);
 	snprintf(pathToTempFiles,sizeof(pathToTempFiles),"%s/.simplemenu/tmp",home);
 	int directoryExists=mkdir(pathToConfigFiles,0700);
 	if (!directoryExists) {
@@ -593,7 +593,7 @@ void createConfigFilesInHomeIfTheyDontExist() {
 		}
 		char copyAppsCommand[5000];
 		mkdir(pathToAppFiles,0700);
-		snprintf(copyAppsCommand,sizeof(copyAppsCommand),"cp apps %s/.simplemenu",home);
+		snprintf(copyAppsCommand,sizeof(copyAppsCommand),"cp -r apps %s/.simplemenu",home);
 		ret = system(copyAppsCommand);
 		if (ret==-1) {
 			generateError("FATAL ERROR", 1);
@@ -605,13 +605,6 @@ void createConfigFilesInHomeIfTheyDontExist() {
 		if (ret==-1) {
 			generateError("FATAL ERROR", 1);
 		}
-//		char copyThemesCommand[5000];
-//		mkdir(pathToThemeFiles,0700);
-//		snprintf(copyThemesCommand,sizeof(copyThemesCommand),"cp -r themes %s/.simplemenu",home);
-//		ret = system(copyThemesCommand);
-//		if (ret==-1) {
-//			generateError("FATAL ERROR", 1);
-//		}
 		char copySectionGroupsCommand[5000];
 		mkdir(pathToSectionGroupsFiles,0700);
 		snprintf(copySectionGroupsCommand,sizeof(copySectionGroupsCommand),"cp -r section_groups %s/.simplemenu",home);
@@ -635,6 +628,15 @@ void createConfigFilesInHomeIfTheyDontExist() {
 		if (ret==-1) {
 			generateError("FATAL ERROR", 1);
 		}
+
+		char copyScriptsCommand[5000];
+		mkdir(pathToScriptsFiles,0700);
+		snprintf(copyScriptsCommand,sizeof(copyScriptsCommand),"cp -r scripts %s/.simplemenu",home);
+		ret = system(copyScriptsCommand);
+		if (ret==-1) {
+			generateError("FATAL ERROR", 1);
+		}
+
 		mkdir(pathToTempFiles,0700);
 	}
 	logMessage("INFO","createConfigFilesInHomeIfTheyDontExist","Validated configuration existence");
@@ -1427,7 +1429,7 @@ void loadLastState() {
 	int menuVisible= -1;
 	int themeRead= -1;
 	int timeout= -1;
-	int volumne= -1;
+	int volume= -1;
 	int groupCounter=-1;
 	int savedVersion=-1;
 	int itemsRead=-1;

@@ -1098,8 +1098,6 @@ void initializeDisplay() {
 	SCREEN_WIDTH=320;
 	SCREEN_HEIGHT=240;
 
-	SDL_Rect** modes = SDL_ListModes(NULL,SDL_NOFRAME|SDL_SWSURFACE);
-
 	fp1 = fopen("/sys/class/graphics/fb0/device/allow_downscaling","w");
 	if (fp1!=NULL) {
 		fprintf(fp1, "%d" , 0);
@@ -1107,6 +1105,7 @@ void initializeDisplay() {
 	}
 
 #if defined TARGET_OD || defined TARGET_OD_BETA
+	SDL_Rect** modes = SDL_ListModes(NULL,SDL_NOFRAME|SDL_SWSURFACE);
 	if(modes==(SDL_Rect **)0) {
 		printf("No available modes\n");
 	} else if(modes==(SDL_Rect **)-1) {

@@ -9,7 +9,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdio.h>
-#include </home/bittboy/git/libopk/opk.h>
+#include "/home/jgferrer/Development/libopk/opk.h"
 
 #include <sys/ioctl.h>
 #if defined(TARGET_NPG) || defined(TARGET_OD) || defined TARGET_OD_BETA
@@ -88,17 +88,20 @@ char* getRomRealName(char *romName) {
 }
 
 int getOPK(char *package_path, struct OPKDesktopFile *desktopFiles) {
+
 #ifndef TARGET_BITTBOY
 	struct OPK *opk = opk_open(package_path);
 	if (opk == NULL) {
 		return 0;
 	}
 #endif
+
 	char *name;
 	char *category;
 	char *terminal;
 
 	int i = 0;
+
 #ifndef TARGET_BITTBOY
 	while (1) {
 		const char *metadata_name;
@@ -137,6 +140,7 @@ int getOPK(char *package_path, struct OPKDesktopFile *desktopFiles) {
 	}
 	opk_close(opk);
 #endif
+
 	return i;
 }
 

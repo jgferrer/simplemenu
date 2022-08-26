@@ -1,6 +1,10 @@
+#include <fcntl.h>
+#include <linux/soundcard.h>
 #include <errno.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <sys/ioctl.h>
+#include <sys/mman.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -21,6 +25,8 @@
 #include "../headers/utils.h"
 
 int switchToGroup;
+volatile uint32_t *memregscontrol;
+int32_t memdevcontrol = 0;
 
 void scrollUp() {
 	CURRENT_SECTION.currentGameNode=CURRENT_SECTION.currentGameNode->prev;
@@ -467,7 +473,7 @@ void removeFavorite() {
 	if (favoritesSize>0) {
 		#if defined TARGET_OD || defined TARGET_OD_BETA
 		Shake_Play(device, effect_id1);
-		#endif	
+		#endif
 		for (int i=CURRENT_GAME_NUMBER;i<favoritesSize;i++) {
 			strcpy(favorites[i].emulatorFolder,favorites[i+1].emulatorFolder);
 			strcpy(favorites[i].section,favorites[i+1].section);
@@ -525,7 +531,7 @@ void markAsFavorite(struct Rom *rom) {
 			Shake_Play(device, effect_id);
 			msleep(200);
 			Shake_Play(device, effect_id);
-			#endif		
+			#endif
 			if (CURRENT_SECTION.onlyFileNamesNoExtension) {
 				strcpy(favorites[favoritesSize].name, getGameName(rom->name));
 			} else {
@@ -570,7 +576,7 @@ void performGroupChoosingAction() {
 //		pthread_create(&clockThread, NULL, updateClock,NULL);
 		return;
 	}
-	if (keys[BTN_UP]) {
+	if ((keys[BTN_L1] || keys[BTN_UP] || keys[BTN_LEFT])) {
 		if(activeGroup>0) {
 			activeGroup--;
 		} else {
@@ -578,7 +584,7 @@ void performGroupChoosingAction() {
 		}
 		return;
 	}
-	if (keys[BTN_DOWN]) {
+	if ((keys[BTN_R1] || keys[BTN_DOWN] || keys[BTN_RIGHT])) {
 		if(activeGroup<sectionGroupCounter-1) {
 			activeGroup++;
 		} else {
@@ -809,29 +815,37 @@ void performSettingsChoosingAction() {
 		} else if (chosenSetting==VOLUME_LEVEL_OPTION) {
 			if (keys[BTN_LEFT]) {
 				if (volumeValue>0) {
-					volumeValue-=5;
+					volumeValue-=10;
 				}
 			} else {
 				if (volumeValue<100) {
-					volumeValue+=5;
+					volumeValue+=10;
 				}
 			}
-			
+
 			#ifdef TARGET_RFW
 			uint32_t soundDev = open("/dev/mixer", O_RDWR);
-			int32_t vol = (volumeValue << 8) | 100;
+			int divider = 10;
+			if(volumeValue >= 7) {
+				divider = 1;
+			} else {
+				if(volumeValue >= 5){
+					divider = 5;
+				}
+			}
+			int32_t vol = (volumeValue / divider);
 			 /* Init memory registers, pretty much required for anthing RS-97 specific */
-			memdev = open("/dev/mem", O_RDWR);
-			if (memdev > 0) {
-				memregs = (uint32_t*)mmap(0, 0x20000, PROT_READ | PROT_WRITE, MAP_SHARED, memdev, 0x10000000);
-				if (memregs == MAP_FAILED) {
-				  close(memdev);
+			memdevcontrol = open("/dev/mem", O_RDWR);
+			if (memdevcontrol > 0) {
+				memregscontrol = (uint32_t*)mmap(0, 0x20000, PROT_READ | PROT_WRITE, MAP_SHARED, memdevcontrol, 0x10000000);
+				if (memregscontrol == MAP_FAILED) {
+				  close(memdevcontrol);
 				}
 			}
 			ioctl(soundDev, SOUND_MIXER_WRITE_VOLUME, &vol);
 			close(soundDev);
 			#endif
-			
+
 		} else if (chosenSetting==DEFAULT_OPTION) {
 			char command [300];
 			if (shutDownEnabled) {

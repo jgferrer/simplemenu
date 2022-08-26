@@ -74,13 +74,20 @@ void resetScreenOffTimer() {
 void initSuspendTimer() {
 	timeoutTimer=SDL_AddTimer(timeoutValue * 1e3, suspend, NULL);
 	isSuspended=0;
-	logMessage("INFO","Suspend timer initialized");
+//	logMessage("INFO","Suspend timer initialized");
 }
 
 void HW_Init() {
     uint32_t soundDev = open("/dev/mixer", O_RDWR);
-    //int32_t vol = (100 << 8) | 100;
-	int32_t vol = (volumeValue << 8) | 100;
+    int divider = 10;
+	if(volumeValue >= 7) {
+		divider = 1;
+	} else {
+		if(volumeValue >= 5){
+			divider = 5;
+		}
+	}
+	int32_t vol = (volumeValue / divider);
 
     /* Init memory registers, pretty much required for anthing RS-97 specific */
 	memdev = open("/dev/mem", O_RDWR);
@@ -95,7 +102,7 @@ void HW_Init() {
 //    /* Setting Volume to max, that will avoid issues, i think */
     ioctl(soundDev, SOUND_MIXER_WRITE_VOLUME, &vol);
     close(soundDev);
-	logMessage("INFO","HW Initialized");
+//	logMessage("INFO","HW Initialized");
 }
 
 void cycleFrequencies() {

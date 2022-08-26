@@ -682,7 +682,7 @@ void setOptionsAndValues (char **options, char **values, char **hints){
 	values[FULL_SCREEN_FOOTER_OPTION]= malloc(10);
 	values[FULL_SCREEN_MENU_OPTION]= malloc(10);
 	values[THEME_OPTION]= malloc(2000);
-	values[SCREEN_TIMEOUT_OPTION]= malloc(40);	
+	values[SCREEN_TIMEOUT_OPTION]= malloc(40);
 	values[DEFAULT_OPTION]= malloc(4);
 	values[USB_OPTION]= malloc(100);
 	values[SHUTDOWN_OPTION]= malloc(30);
@@ -699,7 +699,7 @@ void setOptionsAndValues (char **options, char **values, char **hints){
 	hints[SHUTDOWN_OPTION]= malloc(100);
 	hints[HELP_OPTION]= malloc(100);
 	hints[VOLUME_LEVEL_OPTION]= malloc(100);
-	
+
 	strcpy(options[TIDY_ROMS_OPTION],"Tidy rom names ");
 	strcpy(options[FULL_SCREEN_FOOTER_OPTION],"Fullscreen rom names ");
 	strcpy(options[FULL_SCREEN_MENU_OPTION],"Fullscreen menu ");
@@ -709,7 +709,7 @@ void setOptionsAndValues (char **options, char **values, char **hints){
 	strcpy(options[SCREEN_TIMEOUT_OPTION],"Screen timeout ");
 	strcpy(options[VOLUME_LEVEL_OPTION],"Volume level ");
 	strcpy(options[DEFAULT_OPTION],"Default launcher  ");
-	
+
 	logMessage("INFO","setOptionsAndValues","Default option");
 	logMessage("INFO","setOptionsAndValues",options[DEFAULT_OPTION]);
 	#if defined TARGET_RFW
@@ -729,7 +729,7 @@ void setOptionsAndValues (char **options, char **values, char **hints){
 	strcpy(hints[SCREEN_TIMEOUT_OPTION],"SECONDS UNTIL THE SCREEN TURNS OFF");
 	strcpy(hints[VOLUME_LEVEL_OPTION],"VOLUME LEVEL (RFW ONLY)");
 	strcpy(hints[DEFAULT_OPTION],"LAUNCH AFTER BOOTING");
-	
+
 	logMessage("INFO","setOptionsAndValues","Default option hint");
 	logMessage("INFO","setOptionsAndValues",hints[DEFAULT_OPTION]);
 	strcpy(hints[HELP_OPTION],"HOW TO USE THIS MENU");
@@ -789,7 +789,7 @@ void setOptionsAndValues (char **options, char **values, char **hints){
 	} else {
 		sprintf(values[SCREEN_TIMEOUT_OPTION],"%s","always on");
 	}
-	
+
 	if (shutDownEnabled) {
 		strcpy(values[DEFAULT_OPTION],"yes");
 		logMessage("INFO","setOptionsAndValues","Default option value");
@@ -799,6 +799,7 @@ void setOptionsAndValues (char **options, char **values, char **hints){
 		logMessage("INFO","setOptionsAndValues","Default option value");
 		logMessage("INFO","setOptionsAndValues",values[DEFAULT_OPTION]);
 	}
+
 	#if defined TARGET_RFW
 	strcpy(values[USB_OPTION]," \0");
 	#else
@@ -813,7 +814,7 @@ void setOptionsAndValues (char **options, char **values, char **hints){
 //	} else {
 		strcpy(values[HELP_OPTION]," \0");
 //	}
-	sprintf(values[VOLUME_VALUE_OPTION],"%d",volumeValue);
+	sprintf(values[VOLUME_LEVEL_OPTION],"%d",volumeValue);
 }
 
 void drawBatteryMeter() {
@@ -851,7 +852,6 @@ void drawSettingsScreen() {
 	TIDY_ROMS_OPTION=3;
 	FULL_SCREEN_FOOTER_OPTION=4;
 	FULL_SCREEN_MENU_OPTION=5;
-	DEFAULT_OPTION=6;
 	#if defined TARGET_BITTBOY
 	USB_OPTION=8;
 	HELP_OPTION=7;
@@ -859,7 +859,13 @@ void drawSettingsScreen() {
 	USB_OPTION=7;
 	HELP_OPTION=8;
 	#endif
-	VOLUME_LEVEL_OPTION=9
+	#ifdef TARGET_RFW
+	VOLUME_LEVEL_OPTION=6;
+	DEFAULT_OPTION=9;
+	#else
+	VOLUME_LEVEL_OPTION=9;
+	DEFAULT_OPTION=6;
+	#endif
 
 	int headerAndFooterBackground[3]={37,50,56};
 	int headerAndFooterText[3]={255,255,255};
@@ -972,7 +978,7 @@ void drawSettingsScreen() {
 	free(hints[USB_OPTION]);
 	free(hints[HELP_OPTION]);
 	free(hints[VOLUME_LEVEL_OPTION]);
-	
+
 	logMessage("INFO","drawSettingsScreen","Settings drawn");
 }
 
